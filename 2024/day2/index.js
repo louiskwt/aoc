@@ -19,8 +19,6 @@ async function processReportLine() {
 
 const reports = await processReportLine();
 
-console.log(reports);
-
 function checkIncreasing(num, index, arr) {
   if (!index) return true;
   const prev = arr[index - 1];
@@ -37,6 +35,19 @@ const safeReports = reports.filter((r) => {
   if (r.every(checkIncreasing) || r.every(checkDecreasing)) {
     return r;
   }
+
+  const isSafe = [];
+
+  for (let i = 0; i < r.length; i++) {
+    const dampened = [...r];
+    dampened.splice(i, 1);
+    if (dampened.every(checkIncreasing) || dampened.every(checkDecreasing)) {
+      isSafe.push(true);
+    } else {
+      isSafe.push(false);
+    }
+  }
+  if (isSafe.some((v) => v)) return r;
 });
 
 console.log(safeReports.length);
