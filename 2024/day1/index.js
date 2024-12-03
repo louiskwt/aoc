@@ -39,3 +39,18 @@ const totalDistance = sortedLeft.reduce((acc, currentLocation, currentIndex) => 
 }, 0);
 
 console.log(totalDistance);
+
+// part 2: similarity score
+
+const similarityScore = sortedLeft.reduce((acc, currentLocation) => {
+  const count = {[currentLocation]: 0};
+  for (const num of sortedRight) {
+    if (num === currentLocation) {
+      count[currentLocation] = count[currentLocation] + 1;
+    }
+  }
+  //   console.log(count);
+  return acc + currentLocation * count[currentLocation];
+}, 0);
+
+console.log(similarityScore);
