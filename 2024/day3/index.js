@@ -21,15 +21,26 @@ const instruction = await processInstructions();
 console.log(instruction);
 
 // massage the instructioins with regex by replacing everything outside of mul(xx, xx) with ' '
-const cleanedInstructions = instruction.match(/mul\(\d+\,\d+\)/gm);
+const cleanedInstructions = instruction.match(/mul\(\d+\,\d+\)|do\(\)|don't\(\)/gm);
 
 console.log(cleanedInstructions);
 
-const sum = cleanedInstructions.reduce((acc, curr) => {
-  const numbers = curr.match(/\d+/g);
-  const product = numbers[0] * numbers[1];
-  acc += product;
-  return acc;
-}, 0);
+let sum = 0;
+let enabled = true;
+
+for (const instruction of cleanedInstructions) {
+  // handle do & don't
+  if (instruction === "don't()") {
+    enabled = false;
+  }
+  if (instruction === "do()") {
+    enabled = true;
+  }
+
+  if (enabled && instruction !== "do()" && instruction !== "don't()") {
+    const numbers = instruction.match(/\d+/g);
+    sum += numbers[0] * numbers[1];
+  }
+}
 
 console.log(sum);
