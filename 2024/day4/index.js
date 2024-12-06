@@ -29,123 +29,16 @@ console.log(letterLines);
 
 const totalLength = letterLines.length;
 
-const XMAS = ["X", "M", "A", "S"];
-
 let vc = 0;
 let hc = 0;
 let ldc = 0;
 let rdc = 0;
 
-/**
- * Check for horizontal XMAS
- * @param {string[]}  letters
- * @param {Number} currentIndex
- * @param {Number} end
- * @param {boolean} reverse
- * @returns {boolean}
- */
-function horizontalCheck(letters, currentIndex, end, reverse = false) {
-  let i = 1;
-  console.log(currentIndex, end);
-  const matches = [letters[currentIndex]];
-  while (i < end) {
-    const next = reverse ? currentIndex - i : currentIndex + i;
-    console.log(`next ${next}`);
-    if (XMAS[i] !== letters[next]) {
-      break;
-    } else {
-      matches.push(letters[next]);
-    }
-    i += 1;
-  }
-  console.log(`horizontal: ${matches}`);
-  return matches.length === XMAS.length;
-}
-
-/**
- * Check for vertical XMAS
- * @param {string[][]} letters
- * @param {Number} currentIndex
- * @param {Number} verticalIndex
- * @param {Number} end
- * @param {boolean} reverse
- * @returns {boolean}
- */
-function verticalCheck(letters, currentIndex, verticalIndex, end, reverse = false) {
-  let i = 1;
-  //   console.log(`vertical: ${verticalIndex}, pos: ${currentIndex}, end: ${end}`);
-  const matches = [letters[verticalIndex][currentIndex]];
-  while (i < end) {
-    const next = reverse ? verticalIndex - i : verticalIndex + i;
-    console.log(`next ${next}`);
-    if (XMAS[i] !== letters[next][currentIndex]) {
-      break;
-    } else {
-      matches.push(letters[next][currentIndex]);
-    }
-    i += 1;
-  }
-  console.log(`vertical: ${matches}`);
-  return matches.length === XMAS.length;
-}
-/**
- * Check for diagnol XMAS
- * @param {string[][]} letters
- * @param {Number} horizontalIndex
- * @param {Number} verticalIndex
- * @param {Number} end
- * @param {boolean} reverse
- * @returns {boolean}
- */
-function leftDiagnolCheck(letters, horizontalIndex, verticalIndex, end, reverse = false) {
-  let i = 1;
-  //   console.log(`diagnol (vertical): ${verticalIndex}, pos: ${currentIndex}, end: ${end}`);
-  const matches = [letters[verticalIndex][horizontalIndex]];
-  while (i < end) {
-    const nextV = reverse ? verticalIndex - i : verticalIndex + i;
-    const nextH = reverse ? horizontalIndex + i : horizontalIndex - i;
-    // console.log(`nextV: ${nextV}, nextH: ${nextH} `);
-    if (XMAS[i] !== letters[nextV][nextH]) {
-      break;
-    } else {
-      matches.push(letters[nextV][nextH]);
-    }
-    i += 1;
-  }
-  console.log(`diagnol: ${matches}`);
-  return matches.length === XMAS.length;
-}
-/**
- * Check for alt diagnol XMAS
- * @param {string[][]} letters
- * @param {Number} horizontalIndex
- * @param {Number} verticalIndex
- * @param {Number} end
- * @param {boolean} reverse
- * @returns {boolean}
- */
-function rightDiagnolCheck(letters, horizontalIndex, verticalIndex, end, reverse = false) {
-  let i = 1;
-  //  console.log(`diagnol (vertical): ${verticalIndex}, pos: ${currentIndex}, end: ${end}`);
-  const matches = [letters[horizontalIndex][horizontalIndex]];
-  while (i < end) {
-    const nextV = reverse ? verticalIndex - i : verticalIndex + i;
-    const nextH = reverse ? horizontalIndex - i : horizontalIndex + i;
-    // console.log(`nextV: ${nextV}, nextH: ${nextH} `);
-    if (XMAS[i] !== letters[nextV][nextH]) {
-      break;
-    } else {
-      matches.push(letters[nextV][nextH]);
-    }
-    i += 1;
-  }
-  console.log(`diagnol: ${matches}`);
-  return matches.length === XMAS.length;
-}
-
 let dc = 0;
 
 let count = 0;
+
+let xmasCount = 0;
 
 for (let r = 0; r < totalLength; r++) {
   const lineLen = letterLines[r].length;
@@ -162,9 +55,32 @@ for (let r = 0; r < totalLength; r++) {
     // reverse diagnol
     if (r + 3 < totalLength && c + 3 < lineLen && letterLines[r][c] === "S" && letterLines[r + 1][c + 1] === "A" && letterLines[r + 2][c + 2] === "M" && letterLines[r + 3][c + 3] === "X") dc += 1;
     if (r - 3 >= 0 && c + 3 < lineLen && letterLines[r][c] === "S" && letterLines[r - 1][c + 1] === "A" && letterLines[r - 2][c + 2] === "M" && letterLines[r - 3][c + 3] === "X") dc += 1;
+
+    // part 2
+    // M . S
+    //   A
+    // M   S
+
+    // S . M
+    //   A
+    // S . M
+
+    // S . S
+    //   A
+    // M . M
+
+    // M . M
+    //   A
+    // S . S
+
+    if (r + 2 < totalLength && c + 2 < lineLen && letterLines[r][c] === "M" && letterLines[r][c + 2] === "S" && letterLines[r + 1][c + 1] === "A" && letterLines[r + 2][c] === "M" && letterLines[r + 2][c + 2] === "S") xmasCount += 1;
+    if (r + 2 < totalLength && c + 2 < lineLen && letterLines[r][c] === "S" && letterLines[r][c + 2] === "M" && letterLines[r + 1][c + 1] === "A" && letterLines[r + 2][c] === "S" && letterLines[r + 2][c + 2] === "M") xmasCount += 1;
+    if (r + 2 < totalLength && c + 2 < lineLen && letterLines[r][c] === "S" && letterLines[r][c + 2] === "S" && letterLines[r + 1][c + 1] === "A" && letterLines[r + 2][c] === "M" && letterLines[r + 2][c + 2] === "M") xmasCount += 1;
+    if (r + 2 < totalLength && c + 2 < lineLen && letterLines[r][c] === "M" && letterLines[r][c + 2] === "M" && letterLines[r + 1][c + 1] === "A" && letterLines[r + 2][c] === "S" && letterLines[r + 2][c + 2] === "S") xmasCount += 1;
   }
 }
 
 console.log(`hc: ${hc}, vc: ${vc}, dc: ${dc}`);
 count = hc + vc + dc;
 console.log(`Count: ${count}`);
+console.log(`xmas: ${xmasCount}`);
