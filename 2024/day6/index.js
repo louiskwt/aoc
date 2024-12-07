@@ -1,5 +1,5 @@
 import {readFileSync} from "fs";
-const input = readFileSync("./input.txt").toString().split("\n");
+const input = readFileSync("./example.txt").toString().split("\n");
 
 console.log(input);
 
@@ -15,6 +15,8 @@ for (let i = 0; i < row; i++) {
     guardPos.y = input[i].indexOf("^");
   }
 }
+
+const {x: startX, y: startY} = guardPos;
 
 let visitedPosition = [];
 
@@ -72,6 +74,19 @@ do {
   }
 } while (guardPos.x >= 0 && guardPos.y >= 0 && guardPos.x < row && guardPos.y < col);
 
+console.log(visitedPosition.length - 1);
+
 const uniqueVisitedPositions = Array.from(new Set(visitedPosition.map((obj) => JSON.stringify(obj)))).map((str) => JSON.parse(str));
-console.log(uniqueVisitedPositions);
-console.log(uniqueVisitedPositions.length);
+// console.log(uniqueVisitedPositions);
+// console.log(uniqueVisitedPositions.length);
+
+console.log(looped);
+
+function hasEnteredLoop(visitedPositions) {
+  // Get the current set of visited positions
+  const currentVisitedPositions = new Set(visitedPositions.map((pos) => JSON.stringify(pos)));
+
+  // Check if the size of the current set is the same as the previous set
+  // If it's the same, it means the guard has entered a loop
+  return currentVisitedPositions.size === visitedPositions.length;
+}
